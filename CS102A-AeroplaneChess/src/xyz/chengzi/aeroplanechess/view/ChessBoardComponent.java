@@ -20,6 +20,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
 
     private final List<InputListener> listenerList = new ArrayList<>();
     private final SquareComponent[][] gridComponents;
+    private final SquareComponent[][] homeCompoents;
     private final int dimension, endDimension;
     private final int gridSize;
 
@@ -29,6 +30,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
         setSize(size * 2, size * 2);
 
         this.gridComponents = new SquareComponent[4][dimension + endDimension];
+        this.homeCompoents = new SquareComponent[4][4];
         this.dimension = dimension;
         this.endDimension = endDimension;
         this.gridSize = size / (dimension + 1);
@@ -140,8 +142,35 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
                 gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
                 add(gridComponents[player][index]);
             }
+            for(int index = 0 ; index < 4 ;index++){
+                homeCompoents[player][index] = new SquareComponent(gridSize,BOARD_COLORS[player],player,index);
+                    }
+                }
+        homeCompoents[0][0].setLocation(gridSize,gridSize);
+        homeCompoents[0][1].setLocation(gridSize,gridSize*2);
+        homeCompoents[0][2].setLocation(gridSize*2,gridSize);
+        homeCompoents[0][3].setLocation(gridSize*2,gridSize*2);
+        homeCompoents[1][0].setLocation(gridSize*12,gridSize*1);
+        homeCompoents[1][1].setLocation(gridSize*12,gridSize*2);
+        homeCompoents[1][2].setLocation(gridSize*13,gridSize*2);
+        homeCompoents[1][3].setLocation(gridSize*13,gridSize*1);
+        homeCompoents[2][0].setLocation(gridSize*12,gridSize*12);
+        homeCompoents[2][1].setLocation(gridSize*12,gridSize*13);
+        homeCompoents[2][2].setLocation(gridSize*13,gridSize*12);
+        homeCompoents[2][3].setLocation(gridSize*13,gridSize*13);
+        homeCompoents[3][0].setLocation(gridSize*2,gridSize*12);
+        homeCompoents[3][1].setLocation(gridSize*2,gridSize*13);
+        homeCompoents[3][2].setLocation(gridSize*1,gridSize*12);
+        homeCompoents[3][3].setLocation(gridSize*1,gridSize*13);
+        for(int i =0 ;i<=3;i++){
+            for(int j =0;j<=3;j++){
+                add(homeCompoents[i][j]);
+            }
         }
-    }
+            }
+
+
+
 
     public SquareComponent getGridAt(ChessBoardLocation location) {
         return gridComponents[location.getColor()][location.getIndex()];
