@@ -167,6 +167,8 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
             if (clickedComponent instanceof SquareComponent) {
                 SquareComponent square = (SquareComponent) clickedComponent;
                 ChessBoardLocation location = new ChessBoardLocation(square.getPlayer(), square.getIndex());
+//                System.out.println("     "+location.getIndex());
+//                System.out.println("     "+location.getColor());
                 for (InputListener listener : listenerList) {
                     if (clickedComponent.getComponentCount() == 0) {
                         listener.onPlayerClickSquare(location, square);

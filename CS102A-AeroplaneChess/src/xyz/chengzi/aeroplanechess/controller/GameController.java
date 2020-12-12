@@ -18,6 +18,7 @@ public class GameController implements InputListener, Listenable<GameStateListen
     private final List<GameStateListener> listenerList = new ArrayList<>();
     private final ChessBoardComponent view;
     private final ChessBoard model;
+   public int rollTime = 0;
 
     private Integer rolledNumber;
     private int currentPlayer;
@@ -51,7 +52,11 @@ public class GameController implements InputListener, Listenable<GameStateListen
 
     public int rollDice() {
         if (rolledNumber == null) {
-            return rolledNumber = RandomUtil.nextInt(1, 6);
+            rolledNumber = RandomUtil.nextInt(1,6);
+            rolledNumber<<=16;
+            int number2 = RandomUtil.nextInt(1,6);
+            rolledNumber |= number2;
+            return rolledNumber;
         } else {
             return -1;
         }

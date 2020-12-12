@@ -9,6 +9,7 @@ public class DiceSelectorComponent extends JComponent implements ItemListener {
     private JRadioButton randomDiceRadio;
     private JComboBox<Integer> diceComboBox;
     private boolean randomDice = true;
+    private int numberOfChoose = 0;
 
     public DiceSelectorComponent() {
         setLayout(null); // Use absolute layout
@@ -53,8 +54,15 @@ public class DiceSelectorComponent extends JComponent implements ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (randomDiceRadio.isSelected()) {
-            randomDice = true;
-            diceComboBox.setVisible(false);
+            numberOfChoose+=1;
+            if(numberOfChoose >=2){
+                randomDice = true;
+                diceComboBox.setVisible(false);
+            }else{
+                randomDice = true;
+                diceComboBox.setVisible(true);
+            }
+
         } else {
             randomDice = false;
             diceComboBox.setVisible(true);
