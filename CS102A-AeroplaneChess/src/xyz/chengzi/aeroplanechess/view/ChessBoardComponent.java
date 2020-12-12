@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChessBoardComponent extends JComponent implements Listenable<InputListener>, ChessBoardListener {
-    private static final Color[] BOARD_COLORS = {Color.YELLOW, Color.BLUE, Color.RED,Color.GREEN};
+    private static final Color[] BOARD_COLORS = {Color.YELLOW, Color.BLUE,Color.GREEN,Color.RED};
     private static final Color[] PIECE_COLORS = {Color.YELLOW.darker(), Color.BLUE.darker(),
             Color.GREEN.darker(), Color.RED.darker()};
 
