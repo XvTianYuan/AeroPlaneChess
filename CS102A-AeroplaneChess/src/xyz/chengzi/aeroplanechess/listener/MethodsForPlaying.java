@@ -40,7 +40,6 @@ public interface MethodsForPlaying {
     //than 10, any pieces moved by the first two steps must return to their hangar and
     //play passes to the next player.
     boolean nextRoll(int numberOfDiceOne, int numberOfDiceTwo);
-
     //my supplement to last method.
     //不知道需不需要
     void ChooseToStack(ChessBoardLocation locationOne, ChessBoardLocation locationTwo);

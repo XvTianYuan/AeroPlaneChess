@@ -1,7 +1,9 @@
 package xyz.chengzi.aeroplanechess.model;
 
+import xyz.chengzi.aeroplanechess.controller.GameController;
 import xyz.chengzi.aeroplanechess.listener.ChessBoardListener;
 import xyz.chengzi.aeroplanechess.listener.Listenable;
+import xyz.chengzi.aeroplanechess.view.GameFrame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,8 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
     public void moveChessPiece(ChessBoardLocation src, int steps) {
         ChessBoardLocation dest = src;
+        System.out.print("sdfhidsfhshfise: ");
+        System.out.println(dest.getIndex());
         // FIXME: This just naively move the chess forward without checking anything
         if (dest.getIndex() < 12)
         for (int i = 0; i < steps; i++) {
@@ -85,26 +89,26 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
     public ChessBoardLocation nextLocation(ChessBoardLocation location) {
         // FIXME: This move the chess to next jump location instead of nearby next location
-        int color;
-        int index;
-        if (location.getColor() == 3)
-            color = 0;
-        else color = location.getColor()+1;
-        switch (location.getIndex()) {
-            case  0:index = 10;break;
-            case 10:index =  7;break;
-            case  7:index =  4;break;
-            case  4:index =  1;break;
-            case  1:index = 11;break;
-            case  8:index =  5;break;
-            case  5:index =  2;break;
-            case  2:index = 12;break;
-            case 12:index =  9;break;
-            case  9:index =  6;break;
-            case  6:index =  3;break;
-            default: index = 0;
-        }
-            return new ChessBoardLocation(color,index);
+        int OldColor = location.getColor();
+        int OldIndex = location.getIndex();
+        int NewColor , NewIndex ;
+            if(0<=OldIndex && OldIndex<=2){
+                NewIndex = OldIndex+ 10;
+            }else{
+                NewIndex = OldIndex - 3;
+            }
+            if(OldColor == 0){
+                NewColor = 1 ;
+            }else if(OldColor == 1){
+                NewColor = 2;
+            }else if(OldColor == 2){
+                NewColor = 3;
+            }else{
+                NewColor = 0;
+            }
+
+
+            return new ChessBoardLocation(NewColor,NewIndex);
     }
 
     @Override

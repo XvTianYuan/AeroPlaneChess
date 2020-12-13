@@ -21,6 +21,14 @@ public class GameController implements InputListener, Listenable<GameStateListen
    public int rollTime = 0;
 
     private Integer rolledNumber;
+
+
+    public Integer getRolledNumber() {
+        int num1 = rolledNumber >> 16;
+        int num2 = rolledNumber & 0x00ff;
+        return num1+num2;
+    }
+
     private int currentPlayer;
 
     public GameController(ChessBoardComponent chessBoardComponent, ChessBoard chessBoard) {
@@ -78,7 +86,7 @@ public class GameController implements InputListener, Listenable<GameStateListen
         if (rolledNumber != null) {
             ChessPiece piece = model.getChessPieceAt(location);
             if (piece.getPlayer() == currentPlayer) {
-                model.moveChessPiece(location, rolledNumber);
+                model.moveChessPiece(location, getRolledNumber());
                 listenerList.forEach(listener -> listener.onPlayerEndRound(currentPlayer));
                 nextPlayer();
                 listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));

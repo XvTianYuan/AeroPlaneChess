@@ -8,8 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameFrame extends JFrame implements GameStateListener {
-    private static final String[] PLAYER_NAMES = {"Yellow", "Blue", "Green", "Red"};
+    private static final String[] PLAYER_NAMES = {"Yellow", "Blue","Green","Red"};
     private final JLabel statusLabel = new JLabel();
+    public int num1;
+    public int num2;
+    public int getNum1() {
+        return num1;
+    }
+
+    public int getNum2() {
+        return num2;
+    }
+
 
     public GameFrame(GameController controller) {
         controller.registerListener(this);
@@ -33,8 +43,8 @@ public class GameFrame extends JFrame implements GameStateListener {
         button.addActionListener((e) -> {
             if (diceSelectorComponent.isRandomDice()) {
                 int dice1 = controller.rollDice();
-                int num1 = dice1 >> 16;
-                int num2 = dice1 & 0x00ff;
+                num1 = dice1 >> 16;
+                num2 = dice1 & 0x00ff;
                 if (dice1 != -1) {
                     statusLabel.setText(String.format("[%s] Rolled a (%d)(%d) , sum is %d",
                             PLAYER_NAMES[controller.getCurrentPlayer()], num1, num2, num1 + num2));
