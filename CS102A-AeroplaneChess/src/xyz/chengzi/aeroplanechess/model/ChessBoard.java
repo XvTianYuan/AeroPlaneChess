@@ -122,6 +122,10 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
                     dest = nextLocation(dest, piece);
                 }
             } else {
+
+                if(NumberTotal[piece.getPlayer()][piece.getNumber()]!=0){
+                    NumberTotal[piece.getPlayer()][piece.getNumber()] = 2;
+                }
                 dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps - 1);
             }
         }
@@ -186,7 +190,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             } else{
                 //13-18
                 if(OldIndex == 18){
-                    NumberTotal[piece.getPlayer()][piece.getNumber()]++;
+                    NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
                     NewColor = OldColor;
                     NewIndex = OldIndex-1;
                 }else{
@@ -197,22 +201,18 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         }else{
             NewColor = OldColor;
             if(OldIndex == 12){
-                NumberTotal[piece.getPlayer()][piece.getNumber()]++;
+                NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
                 NewIndex = OldIndex +1;
-                System.out.println("12: Total is : "+NumberTotal[piece.getPlayer()][piece.getNumber()]);
             }
             else if(OldIndex == 18){
-                NumberTotal[piece.getPlayer()][piece.getNumber()]++;
+                NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
                 NewIndex = OldIndex -1;
-                System.out.println("18: Total is : "+NumberTotal[piece.getPlayer()][piece.getNumber()]);
             }else{
                 int num = NumberTotal[piece.getPlayer()][piece.getNumber()]%2;
                 if(num == 0){
                     NewIndex = OldIndex+1;
-                    System.out.println("num=0: Total is : "+NumberTotal[piece.getPlayer()][piece.getNumber()]);
                 }else{
                     NewIndex = OldIndex-1;
-                    System.out.println("num=1: Total is : "+NumberTotal[piece.getPlayer()][piece.getNumber()]);
                 }
             }
         }
