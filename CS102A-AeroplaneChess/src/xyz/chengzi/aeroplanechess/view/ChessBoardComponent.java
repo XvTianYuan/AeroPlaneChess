@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChessBoardComponent extends JComponent implements Listenable<InputListener>, ChessBoardListener {
-    private static final Color[] BOARD_COLORS = {Color.YELLOW, Color.BLUE,Color.GREEN,Color.RED};
+    private static final Color[] BOARD_COLORS = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.RED};
     private static final Color[] PIECE_COLORS = {Color.YELLOW.darker(), Color.BLUE.darker(),
             Color.GREEN.darker(), Color.RED.darker()};
 
     private final List<InputListener> listenerList = new ArrayList<>();
     private final SquareComponent[][] gridComponents;
-    private final SquareComponent[][] homeCompoents;
     private final int dimension, endDimension;
     private final int gridSize;
 
@@ -29,8 +28,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
         setLayout(null); // Use absolute layout
         setSize(size * 2, size * 2);
 
-        this.gridComponents = new SquareComponent[4][dimension + endDimension];
-        this.homeCompoents = new SquareComponent[4][4];
+        this.gridComponents = new SquareComponent[4][dimension + endDimension + 4];
         this.dimension = dimension;
         this.endDimension = endDimension;
         this.gridSize = size / (dimension + 1);
@@ -40,8 +38,68 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
     private int gridLocation(int player, int index) {
         // FIXME: Calculate proper location for each grid
         int boardIndex = (1 + 13 * player + 4 * (index)) % (4 * dimension);
-        int x, y;
+        int x = 0, y = 0;
         int temp = boardIndex % dimension;
+
+//        if (index <= dimension + endDimension + 3 && index >= dimension + endDimension) {
+//            if (player == 0) {
+//                if (index == dimension + endDimension) {
+//                    x = gridSize;
+//                    y = gridSize;
+//                } else if (index == dimension + endDimension + 1) {
+//                    x = gridSize;
+//                    y = gridSize * 2;
+//                } else if (index == dimension + endDimension + 2) {
+//                    x = gridSize * 2;
+//                    y = gridSize;
+//                } else {
+//                    x = gridSize * 2;
+//                    y = gridSize * 2;
+//                }
+//            } else if (player == 1) {
+//                if (index == dimension + endDimension) {
+//                    x = gridSize * 12;
+//                    y = gridSize;
+//                } else if (index == dimension + endDimension + 1) {
+//                    x = gridSize * 13;
+//                    y = gridSize * 2;
+//                } else if (index == dimension + endDimension + 2) {
+//                    x = gridSize * 13;
+//                    y = gridSize;
+//                } else {
+//                    x = gridSize * 12;
+//                    y = gridSize * 2;
+//                }
+//            } else if (player == 2) {
+//                if (index == dimension + endDimension) {
+//                    x = gridSize * 12;
+//                    y = gridSize * 12;
+//                } else if (index == dimension + endDimension + 1) {
+//                    x = gridSize * 13;
+//                    y = gridSize * 12;
+//                } else if (index == dimension + endDimension + 2) {
+//                    x = gridSize * 13;
+//                    y = gridSize * 13;
+//                } else {
+//                    x = gridSize * 12;
+//                    y = gridSize * 13;
+//                }
+//            } else {
+//                if (index == dimension + endDimension) {
+//                    x = gridSize * 2;
+//                    y = gridSize * 12;
+//                } else if (index == dimension + endDimension + 1) {
+//                    x = gridSize * 2;
+//                    y = gridSize * 13;
+//                } else if (index == dimension + endDimension + 2) {
+//                    x = gridSize;
+//                    y = gridSize * 13;
+//                } else {
+//                    x = gridSize;
+//                    y = gridSize * 12;
+//                }
+//            }
+//        }
 
         if (0 <= temp && temp <= 2) {
             if (boardIndex < dimension) {
@@ -86,12 +144,11 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
                 y = (4 * dimension - boardIndex) * gridSize;
             }
         }
-        if(x == -78){
-            x = 1*gridSize;
-            y= 4*gridSize;
+        if (x == -78) {
+            x = gridSize;
+            y = 4 * gridSize;
         }
-        System.out.println(x);
-        System.out.println(y);
+
         return x << 16 | y;
     }
 
@@ -131,7 +188,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
     private void initGridComponents() {
         for (int player = 0; player < 4; player++) {
             for (int index = 0; index < dimension; index++) {
-                int gridLocation = gridLocation(player, index-1);
+                int gridLocation = gridLocation(player, index - 1);
                 gridComponents[player][index] = new SquareComponent(gridSize, BOARD_COLORS[player], player, index);
                 gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
                 add(gridComponents[player][index]);
@@ -142,34 +199,36 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
                 gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
                 add(gridComponents[player][index]);
             }
-            for(int index = 0 ; index < 4 ;index++){
-                homeCompoents[player][index] = new SquareComponent(gridSize,BOARD_COLORS[player],player,index);
-                    }
-                }
-        homeCompoents[0][0].setLocation(gridSize,gridSize);
-        homeCompoents[0][1].setLocation(gridSize,gridSize*2);
-        homeCompoents[0][2].setLocation(gridSize*2,gridSize);
-        homeCompoents[0][3].setLocation(gridSize*2,gridSize*2);
-        homeCompoents[1][0].setLocation(gridSize*12,gridSize*1);
-        homeCompoents[1][1].setLocation(gridSize*12,gridSize*2);
-        homeCompoents[1][2].setLocation(gridSize*13,gridSize*2);
-        homeCompoents[1][3].setLocation(gridSize*13,gridSize*1);
-        homeCompoents[2][0].setLocation(gridSize*12,gridSize*12);
-        homeCompoents[2][1].setLocation(gridSize*12,gridSize*13);
-        homeCompoents[2][2].setLocation(gridSize*13,gridSize*12);
-        homeCompoents[2][3].setLocation(gridSize*13,gridSize*13);
-        homeCompoents[3][0].setLocation(gridSize*2,gridSize*12);
-        homeCompoents[3][1].setLocation(gridSize*2,gridSize*13);
-        homeCompoents[3][2].setLocation(gridSize*1,gridSize*12);
-        homeCompoents[3][3].setLocation(gridSize*1,gridSize*13);
-        for(int i =0 ;i<=3;i++){
-            for(int j =0;j<=3;j++){
-                add(homeCompoents[i][j]);
+            for (int index = dimension + endDimension; index < dimension + endDimension + 4; index++) {
+                int gridLocation = gridLocation(player, index - 1);
+                gridComponents[player][index] = new SquareComponent(gridSize, BOARD_COLORS[player], player, index);
+//                gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
+//                add(gridComponents[player][index]);
+            }
+
+        }
+        gridComponents[0][dimension + endDimension].setLocation(gridSize, gridSize);
+        gridComponents[0][dimension + endDimension + 1].setLocation(gridSize, gridSize * 2);
+        gridComponents[0][dimension + endDimension + 2].setLocation(gridSize * 2, gridSize);
+        gridComponents[0][dimension + endDimension + 3].setLocation(gridSize * 2, gridSize * 2);
+        gridComponents[1][dimension + endDimension].setLocation(gridSize * 12, gridSize * 1);
+        gridComponents[1][dimension + endDimension + 1].setLocation(gridSize * 12, gridSize * 2);
+        gridComponents[1][dimension + endDimension + 2].setLocation(gridSize * 13, gridSize * 2);
+        gridComponents[1][dimension + endDimension + 3].setLocation(gridSize * 13, gridSize * 1);
+        gridComponents[2][dimension + endDimension].setLocation(gridSize * 12, gridSize * 12);
+        gridComponents[2][dimension + endDimension + 1].setLocation(gridSize * 12, gridSize * 13);
+        gridComponents[2][dimension + endDimension + 2].setLocation(gridSize * 13, gridSize * 12);
+        gridComponents[2][dimension + endDimension + 3].setLocation(gridSize * 13, gridSize * 13);
+        gridComponents[3][dimension + endDimension].setLocation(gridSize * 2, gridSize * 12);
+        gridComponents[3][dimension + endDimension + 1].setLocation(gridSize * 2, gridSize * 13);
+        gridComponents[3][dimension + endDimension + 2].setLocation(gridSize * 1, gridSize * 12);
+        gridComponents[3][dimension + endDimension + 3].setLocation(gridSize * 1, gridSize * 13);
+        for (int player = 0; player < 4; player++) {
+            for (int index = dimension+endDimension;index<dimension+endDimension+4;index++){
+                add(gridComponents[player][index]);
             }
         }
-            }
-
-
+    }
 
 
     public SquareComponent getGridAt(ChessBoardLocation location) {
@@ -224,7 +283,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
     @Override
     public void onChessBoardReload(ChessBoard board) {
         for (int color = 0; color < 4; color++) {
-            for (int index = 0; index < board.getDimension(); index++) {
+            for (int index = 0; index < board.getAllDimension(); index++) {
                 ChessBoardLocation location = new ChessBoardLocation(color, index);
                 ChessPiece piece = board.getChessPieceAt(location);
                 if (piece != null) {

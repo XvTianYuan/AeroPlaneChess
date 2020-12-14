@@ -14,7 +14,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     private final int dimension, endDimension;
 
     public ChessBoard(int dimension, int endDimension) {
-        this.grid = new Square[4][dimension + endDimension];
+        this.grid = new Square[4][dimension + endDimension + 4];
         this.dimension = dimension;
         this.endDimension = endDimension;
 
@@ -23,7 +23,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
     private void initGrid() {
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < dimension + endDimension; j++) {
+            for (int j = 0; j < dimension + endDimension + 4; j++) {
                 grid[i][j] = new Square(new ChessBoardLocation(i, j));
             }
         }
@@ -36,10 +36,22 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             }
         }
         // FIXME: Demo implementation
-        grid[0][0].setPiece(new ChessPiece(0));
-        grid[1][0].setPiece(new ChessPiece(1));
-        grid[2][0].setPiece(new ChessPiece(2));
-        grid[3][0].setPiece(new ChessPiece(3));
+        grid[0][dimension+endDimension].setPiece(new ChessPiece(0));
+        grid[0][dimension+endDimension+1].setPiece(new ChessPiece(0));
+        grid[0][dimension+endDimension+2].setPiece(new ChessPiece(0));
+        grid[0][dimension+endDimension+3].setPiece(new ChessPiece(0));
+        grid[1][dimension+endDimension].setPiece(new ChessPiece(1));
+        grid[1][dimension+endDimension+1].setPiece(new ChessPiece(1));
+        grid[1][dimension+endDimension+2].setPiece(new ChessPiece(1));
+        grid[1][dimension+endDimension+3].setPiece(new ChessPiece(1));
+        grid[2][dimension+endDimension].setPiece(new ChessPiece(2));
+        grid[2][dimension+endDimension+1].setPiece(new ChessPiece(2));
+        grid[2][dimension+endDimension+2].setPiece(new ChessPiece(2));
+        grid[2][dimension+endDimension+3].setPiece(new ChessPiece(2));
+        grid[3][dimension+endDimension].setPiece(new ChessPiece(3));
+        grid[3][dimension+endDimension+1].setPiece(new ChessPiece(3));
+        grid[3][dimension+endDimension+2].setPiece(new ChessPiece(3));
+        grid[3][dimension+endDimension+3].setPiece(new ChessPiece(3));
         listenerList.forEach(listener -> listener.onChessBoardReload(this));
     }
 
@@ -50,7 +62,9 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     public int getDimension() {
         return dimension;
     }
-
+    public int getAllDimension(){
+        return dimension+endDimension+4;
+    }
     public int getEndDimension() {
         return endDimension;
     }
@@ -92,6 +106,11 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         int OldColor = location.getColor();
         int OldIndex = location.getIndex();
         int NewColor , NewIndex ;
+
+        if(OldIndex >= dimension+endDimension){
+            NewColor = OldColor;
+            NewIndex = 0;
+        }else{
             if(0<=OldIndex && OldIndex<=2){
                 NewIndex = OldIndex+ 10;
             }else{
@@ -106,8 +125,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             }else{
                 NewColor = 0;
             }
-
-
+        }
             return new ChessBoardLocation(NewColor,NewIndex);
     }
 
