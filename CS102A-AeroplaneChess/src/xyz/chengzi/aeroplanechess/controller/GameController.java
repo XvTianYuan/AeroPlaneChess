@@ -86,7 +86,7 @@ public class GameController implements InputListener, Listenable<GameStateListen
         if (rolledNumber != null) {
             ChessPiece piece = model.getChessPieceAt(location);
             if (piece.getPlayer() == currentPlayer) {
-                model.moveChessPiece(location, getRolledNumber());
+                model.moveChessPiece(location, getRolledNumber(),piece);
                 listenerList.forEach(listener -> listener.onPlayerEndRound(currentPlayer));
                 nextPlayer();
                 listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));

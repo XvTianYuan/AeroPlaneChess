@@ -36,8 +36,11 @@ public class GameFrame extends JFrame implements GameStateListener {
         add(statusLabel);
 
         DiceSelectorComponent diceSelectorComponent = new DiceSelectorComponent();
+        DiceSelectorComponent diceSelectorComponent1 = new DiceSelectorComponent();
         diceSelectorComponent.setLocation(396, 585);
+        diceSelectorComponent1.setLocation(396,615);
         add(diceSelectorComponent);
+        add(diceSelectorComponent1);
 
         JButton button = new JButton("roll");
         button.addActionListener((e) -> {
