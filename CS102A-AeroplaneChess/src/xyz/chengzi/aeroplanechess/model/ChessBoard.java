@@ -1,5 +1,6 @@
 package xyz.chengzi.aeroplanechess.model;
 
+import jdk.nashorn.internal.ir.OptimisticLexicalContext;
 import xyz.chengzi.aeroplanechess.controller.GameController;
 import xyz.chengzi.aeroplanechess.listener.ChessBoardListener;
 import xyz.chengzi.aeroplanechess.listener.Listenable;
@@ -87,55 +88,84 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         return piece;
     }
 
-    public void moveChessPiece(ChessBoardLocation src, int steps) {
+    public void moveChessPiece(ChessBoardLocation src, int steps, ChessPiece piece) {
         ChessBoardLocation dest = src;
-        System.out.print("sdfhidsfhshfise: ");
-        System.out.println(dest.getIndex());
+
         // FIXME: This just naively move the chess forward without checking anything
-        if (dest.getIndex() < 12) {
+
+        if (dest.getIndex() <= 18) {
             for (int i = 0; i < steps; i++) {
-                dest = nextLocation(dest);
+                dest = nextLocation(dest, piece);
             }
-        } else if (dest.getIndex() >= 12 && dest.getIndex() <= 18) {
-            dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps);
-        } else if (dest.getIndex() >= 19 && dest.getIndex() <= 22) {
+        }else if (dest.getIndex() >= 19 && dest.getIndex() <= 22) {
             dest = new ChessBoardLocation(dest.getColor(), 23);
         } else {
-            int newcolor ;
-            if(dest.getColor() == 0){
+            int newcolor;
+            if (dest.getColor() == 0) {
                 newcolor = 3;
-            }else{
-                newcolor = dest.getColor()-1;
+            } else {
+                newcolor = dest.getColor() - 1;
             }
-            dest = new ChessBoardLocation(newcolor,3);
+            dest = new ChessBoardLocation(newcolor, 3);
 
             if (dest.getIndex() < 12) {
-                for (int i = 0; i < steps-1; i++) {
-                    dest = nextLocation(dest);
+                for (int i = 0; i < steps - 1; i++) {
+                    dest = nextLocation(dest, piece);
                 }
             } else {
-                dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps-1);
+                dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps - 1);
             }
         }
-
         setChessPieceAt(dest, removeChessPieceAt(src));
     }
 
-    public ChessBoardLocation nextLocation(ChessBoardLocation location) {
+    public ChessBoardLocation nextLocation(ChessBoardLocation location, ChessPiece piece) {
         // FIXME: This move the chess to next jump location instead of nearby next location
         int OldColor = location.getColor();
         int OldIndex = location.getIndex();
         int NewColor, NewIndex;
-        System.out.println(OldColor);
-        System.out.println(OldIndex);
-        if (OldIndex >= 19) {
+
+
+        if (OldIndex >= 19 && OldIndex<= 22) {
             NewColor = OldColor;
-            NewIndex = 0;
-        } else {
+            NewIndex = 23;
+        } else if (OldIndex == 23) {
+            if (OldColor == 0) {
+                NewColor = 1;
+            } else if (OldColor == 1) {
+                NewColor = 2;
+            } else if (OldColor == 2) {
+                NewColor = 3;
+            } else {
+                NewColor = 0;
+            }
+        NewIndex = 0;
+        }
+         else if (OldIndex == 12) {
+             System.out.println("player:"+piece.getPlayer());
+            if (piece.getPlayer() == OldColor) {
+                System.out.println("in                     in");
+                NewColor = OldColor;
+                NewIndex = OldIndex + 1;
+            } else {
+                if (OldColor == 0) {
+                    NewColor = 1;
+                } else if (OldColor == 1) {
+                    NewColor = 2;
+                } else if (OldColor == 2) {
+                    NewColor = 3;
+                } else {
+                    NewColor = 0;
+                }
+                NewIndex = 9;
+            }
+        } else if (OldIndex >= 0 && OldIndex <= 11) {
+            //0 to 11(on circle,except 12)
             if (0 <= OldIndex && OldIndex <= 2) {
                 NewIndex = OldIndex + 10;
             } else {
                 NewIndex = OldIndex - 3;
+                //3<= OldIndex <= 11
             }
             if (OldColor == 0) {
                 NewColor = 1;
@@ -146,7 +176,16 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             } else {
                 NewColor = 0;
             }
+        } else if (13 <= OldIndex && OldIndex <= 17) {
+            NewColor = OldColor;
+            NewIndex = OldIndex + 1;
+        } else {
+            System.out.println("go in");
+            NewColor = OldColor;
+            NewIndex = OldIndex;
         }
+
+         System.out.println("NewColor:"+NewColor +" NewIndex:"+NewIndex);
 
         return new ChessBoardLocation(NewColor, NewIndex);
     }
