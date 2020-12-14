@@ -28,7 +28,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
         setLayout(null); // Use absolute layout
         setSize(size * 2, size * 2);
 
-        this.gridComponents = new SquareComponent[4][dimension + endDimension + 4];
+        this.gridComponents = new SquareComponent[4][dimension + endDimension + 5];
         this.dimension = dimension;
         this.endDimension = endDimension;
         this.gridSize = size / (dimension + 1);
@@ -199,7 +199,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
                 gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
                 add(gridComponents[player][index]);
             }
-            for (int index = dimension + endDimension; index < dimension + endDimension + 4; index++) {
+            for (int index = dimension + endDimension; index < dimension + endDimension + 5; index++) {
                 int gridLocation = gridLocation(player, index - 1);
                 gridComponents[player][index] = new SquareComponent(gridSize, BOARD_COLORS[player], player, index);
 //                gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
@@ -223,8 +223,14 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
         gridComponents[3][dimension + endDimension + 1].setLocation(gridSize * 2, gridSize * 13);
         gridComponents[3][dimension + endDimension + 2].setLocation(gridSize * 1, gridSize * 12);
         gridComponents[3][dimension + endDimension + 3].setLocation(gridSize * 1, gridSize * 13);
+
+        gridComponents[0][dimension+endDimension+4].setLocation(0*gridSize,3*gridSize);
+        gridComponents[1][dimension+endDimension+4].setLocation(11*gridSize,0*gridSize);
+        gridComponents[2][dimension+endDimension+4].setLocation(14*gridSize,11*gridSize);
+        gridComponents[3][dimension+endDimension+4].setLocation(3*gridSize,14*gridSize);
+
         for (int player = 0; player < 4; player++) {
-            for (int index = dimension+endDimension;index<dimension+endDimension+4;index++){
+            for (int index = dimension+endDimension;index<dimension+endDimension+5;index++){
                 add(gridComponents[player][index]);
             }
         }

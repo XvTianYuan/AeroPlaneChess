@@ -14,7 +14,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     private final int dimension, endDimension;
 
     public ChessBoard(int dimension, int endDimension) {
-        this.grid = new Square[4][dimension + endDimension + 4];
+        this.grid = new Square[4][dimension + endDimension + 5];
         this.dimension = dimension;
         this.endDimension = endDimension;
 
@@ -23,7 +23,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
     private void initGrid() {
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < dimension + endDimension + 4; j++) {
+            for (int j = 0; j < dimension + endDimension + 5; j++) {
                 grid[i][j] = new Square(new ChessBoardLocation(i, j));
             }
         }
@@ -36,22 +36,22 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             }
         }
         // FIXME: Demo implementation
-        grid[0][dimension+endDimension].setPiece(new ChessPiece(0));
-        grid[0][dimension+endDimension+1].setPiece(new ChessPiece(0));
-        grid[0][dimension+endDimension+2].setPiece(new ChessPiece(0));
-        grid[0][dimension+endDimension+3].setPiece(new ChessPiece(0));
-        grid[1][dimension+endDimension].setPiece(new ChessPiece(1));
-        grid[1][dimension+endDimension+1].setPiece(new ChessPiece(1));
-        grid[1][dimension+endDimension+2].setPiece(new ChessPiece(1));
-        grid[1][dimension+endDimension+3].setPiece(new ChessPiece(1));
-        grid[2][dimension+endDimension].setPiece(new ChessPiece(2));
-        grid[2][dimension+endDimension+1].setPiece(new ChessPiece(2));
-        grid[2][dimension+endDimension+2].setPiece(new ChessPiece(2));
-        grid[2][dimension+endDimension+3].setPiece(new ChessPiece(2));
-        grid[3][dimension+endDimension].setPiece(new ChessPiece(3));
-        grid[3][dimension+endDimension+1].setPiece(new ChessPiece(3));
-        grid[3][dimension+endDimension+2].setPiece(new ChessPiece(3));
-        grid[3][dimension+endDimension+3].setPiece(new ChessPiece(3));
+        grid[0][dimension + endDimension].setPiece(new ChessPiece(0));
+        grid[0][dimension + endDimension + 1].setPiece(new ChessPiece(0));
+        grid[0][dimension + endDimension + 2].setPiece(new ChessPiece(0));
+        grid[0][dimension + endDimension + 3].setPiece(new ChessPiece(0));
+        grid[1][dimension + endDimension].setPiece(new ChessPiece(1));
+        grid[1][dimension + endDimension + 1].setPiece(new ChessPiece(1));
+        grid[1][dimension + endDimension + 2].setPiece(new ChessPiece(1));
+        grid[1][dimension + endDimension + 3].setPiece(new ChessPiece(1));
+        grid[2][dimension + endDimension].setPiece(new ChessPiece(2));
+        grid[2][dimension + endDimension + 1].setPiece(new ChessPiece(2));
+        grid[2][dimension + endDimension + 2].setPiece(new ChessPiece(2));
+        grid[2][dimension + endDimension + 3].setPiece(new ChessPiece(2));
+        grid[3][dimension + endDimension].setPiece(new ChessPiece(3));
+        grid[3][dimension + endDimension + 1].setPiece(new ChessPiece(3));
+        grid[3][dimension + endDimension + 2].setPiece(new ChessPiece(3));
+        grid[3][dimension + endDimension + 3].setPiece(new ChessPiece(3));
         listenerList.forEach(listener -> listener.onChessBoardReload(this));
     }
 
@@ -62,9 +62,11 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     public int getDimension() {
         return dimension;
     }
-    public int getAllDimension(){
-        return dimension+endDimension+4;
+
+    public int getAllDimension() {
+        return dimension + endDimension + 4;
     }
+
     public int getEndDimension() {
         return endDimension;
     }
@@ -90,14 +92,32 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         System.out.print("sdfhidsfhshfise: ");
         System.out.println(dest.getIndex());
         // FIXME: This just naively move the chess forward without checking anything
-        if (dest.getIndex() < 12)
-        for (int i = 0; i < steps; i++) {
-            dest = nextLocation(dest);
+        if (dest.getIndex() < 12) {
+            for (int i = 0; i < steps; i++) {
+                dest = nextLocation(dest);
+            }
+        } else if (dest.getIndex() >= 12 && dest.getIndex() <= 18) {
+            dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps);
+        } else if (dest.getIndex() >= 19 && dest.getIndex() <= 22) {
+            dest = new ChessBoardLocation(dest.getColor(), 23);
+        } else {
+            int newcolor ;
+            if(dest.getColor() == 0){
+                newcolor = 3;
+            }else{
+                newcolor = dest.getColor()-1;
+            }
+            dest = new ChessBoardLocation(newcolor,3);
+
+            if (dest.getIndex() < 12) {
+                for (int i = 0; i < steps-1; i++) {
+                    dest = nextLocation(dest);
+                }
+            } else {
+                dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps-1);
+            }
         }
-        if (dest.getIndex() >= 12)
-            if (dest.getIndex()+steps<=18)
-            dest = new ChessBoardLocation(dest.getColor(),dest.getIndex()+steps);
-            else dest = new ChessBoardLocation(dest.getColor(),36-dest.getIndex()-steps);
+
         setChessPieceAt(dest, removeChessPieceAt(src));
     }
 
@@ -105,28 +125,30 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         // FIXME: This move the chess to next jump location instead of nearby next location
         int OldColor = location.getColor();
         int OldIndex = location.getIndex();
-        int NewColor , NewIndex ;
-
-        if(OldIndex >= dimension+endDimension){
+        int NewColor, NewIndex;
+        System.out.println(OldColor);
+        System.out.println(OldIndex);
+        if (OldIndex >= 19) {
             NewColor = OldColor;
             NewIndex = 0;
-        }else{
-            if(0<=OldIndex && OldIndex<=2){
-                NewIndex = OldIndex+ 10;
-            }else{
+        } else {
+            if (0 <= OldIndex && OldIndex <= 2) {
+                NewIndex = OldIndex + 10;
+            } else {
                 NewIndex = OldIndex - 3;
             }
-            if(OldColor == 0){
-                NewColor = 1 ;
-            }else if(OldColor == 1){
+            if (OldColor == 0) {
+                NewColor = 1;
+            } else if (OldColor == 1) {
                 NewColor = 2;
-            }else if(OldColor == 2){
+            } else if (OldColor == 2) {
                 NewColor = 3;
-            }else{
+            } else {
                 NewColor = 0;
             }
         }
-            return new ChessBoardLocation(NewColor,NewIndex);
+
+        return new ChessBoardLocation(NewColor, NewIndex);
     }
 
     @Override
