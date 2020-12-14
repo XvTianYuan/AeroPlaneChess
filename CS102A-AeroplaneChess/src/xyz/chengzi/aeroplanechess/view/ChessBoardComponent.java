@@ -38,68 +38,8 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
     private int gridLocation(int player, int index) {
         // FIXME: Calculate proper location for each grid
         int boardIndex = (1 + 13 * player + 4 * (index)) % (4 * dimension);
-        int x = 0, y = 0;
+        int x, y;
         int temp = boardIndex % dimension;
-
-//        if (index <= dimension + endDimension + 3 && index >= dimension + endDimension) {
-//            if (player == 0) {
-//                if (index == dimension + endDimension) {
-//                    x = gridSize;
-//                    y = gridSize;
-//                } else if (index == dimension + endDimension + 1) {
-//                    x = gridSize;
-//                    y = gridSize * 2;
-//                } else if (index == dimension + endDimension + 2) {
-//                    x = gridSize * 2;
-//                    y = gridSize;
-//                } else {
-//                    x = gridSize * 2;
-//                    y = gridSize * 2;
-//                }
-//            } else if (player == 1) {
-//                if (index == dimension + endDimension) {
-//                    x = gridSize * 12;
-//                    y = gridSize;
-//                } else if (index == dimension + endDimension + 1) {
-//                    x = gridSize * 13;
-//                    y = gridSize * 2;
-//                } else if (index == dimension + endDimension + 2) {
-//                    x = gridSize * 13;
-//                    y = gridSize;
-//                } else {
-//                    x = gridSize * 12;
-//                    y = gridSize * 2;
-//                }
-//            } else if (player == 2) {
-//                if (index == dimension + endDimension) {
-//                    x = gridSize * 12;
-//                    y = gridSize * 12;
-//                } else if (index == dimension + endDimension + 1) {
-//                    x = gridSize * 13;
-//                    y = gridSize * 12;
-//                } else if (index == dimension + endDimension + 2) {
-//                    x = gridSize * 13;
-//                    y = gridSize * 13;
-//                } else {
-//                    x = gridSize * 12;
-//                    y = gridSize * 13;
-//                }
-//            } else {
-//                if (index == dimension + endDimension) {
-//                    x = gridSize * 2;
-//                    y = gridSize * 12;
-//                } else if (index == dimension + endDimension + 1) {
-//                    x = gridSize * 2;
-//                    y = gridSize * 13;
-//                } else if (index == dimension + endDimension + 2) {
-//                    x = gridSize;
-//                    y = gridSize * 13;
-//                } else {
-//                    x = gridSize;
-//                    y = gridSize * 12;
-//                }
-//            }
-//        }
 
         if (0 <= temp && temp <= 2) {
             if (boardIndex < dimension) {
@@ -148,7 +88,6 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
             x = gridSize;
             y = 4 * gridSize;
         }
-
         return x << 16 | y;
     }
 
@@ -182,6 +121,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
             x -= (index) * gridSize;
             y -= 3 * gridSize;
         }
+
         return x << 16 | y;
     }
 
@@ -205,6 +145,7 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
 //                gridComponents[player][index].setLocation(gridLocation >> 16, gridLocation & 0xffff);
 //                add(gridComponents[player][index]);
             }
+
 
         }
         gridComponents[0][dimension + endDimension].setLocation(gridSize, gridSize);
