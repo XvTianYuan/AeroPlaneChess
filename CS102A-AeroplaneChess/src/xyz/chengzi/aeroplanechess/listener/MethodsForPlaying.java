@@ -9,7 +9,7 @@ public interface MethodsForPlaying {
     boolean CheckForGoOut(int numberOfDiceOne, int numberOfDiceTwo);
     //Take a piece out of the hangar onto the board. This can only be done by rolling a 6
     //with either of the dice (e.g., roll a 3-6, or 6-2, or 6-6).
-    int NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo);
+    int[] NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo);
     //Move a piece that is on the board clockwise around the track. The number of
     //spaces moved is derived from the dices with arithmetic operations, maximum 12.
     //For example, rolling a 2 and a 4 will let you to move any one of your plane by 2, 4,

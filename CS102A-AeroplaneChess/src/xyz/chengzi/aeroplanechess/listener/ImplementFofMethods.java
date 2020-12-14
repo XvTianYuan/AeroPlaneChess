@@ -14,9 +14,17 @@ public class ImplementFofMethods implements MethodsForPlaying {
     }
 
     @Override
-    public int NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo) {
-        int num;
-        num = numberOfDiceOne + numberOfDiceTwo;
+    public int[] NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo) {
+        int add=0,sub=0,mul=0,div=0;
+        add = numberOfDiceOne + numberOfDiceTwo;
+        sub = Math.abs(numberOfDiceOne - numberOfDiceTwo);
+        if (numberOfDiceOne * numberOfDiceTwo <= 12)
+            mul = numberOfDiceOne * numberOfDiceTwo;
+        if (numberOfDiceOne >= numberOfDiceTwo && numberOfDiceOne % numberOfDiceTwo == 0)
+            div = numberOfDiceOne / numberOfDiceTwo;
+        if (numberOfDiceTwo >= numberOfDiceOne && numberOfDiceTwo % numberOfDiceOne == 0)
+            div  = numberOfDiceTwo / numberOfDiceOne;
+        int[]num={add,sub,mul,div};
         return num;
     }
 
@@ -31,7 +39,9 @@ public class ImplementFofMethods implements MethodsForPlaying {
 
     @Override
     public int FlyingFewGrids(ChessBoardLocation ChessLocation, ChessBoardLocation BoardLocation) {
-        return 0;
+        if (ChessLocation.getColor() == BoardLocation.getColor())
+        return 4;
+        else return 0;
     }
 
     @Override
