@@ -1,6 +1,7 @@
 package xyz.chengzi.aeroplanechess.controller;
 
 import xyz.chengzi.aeroplanechess.listener.GameStateListener;
+import xyz.chengzi.aeroplanechess.listener.ImplementFofMethods;
 import xyz.chengzi.aeroplanechess.listener.InputListener;
 import xyz.chengzi.aeroplanechess.listener.Listenable;
 import xyz.chengzi.aeroplanechess.model.ChessBoard;
@@ -9,8 +10,10 @@ import xyz.chengzi.aeroplanechess.model.ChessPiece;
 import xyz.chengzi.aeroplanechess.util.RandomUtil;
 import xyz.chengzi.aeroplanechess.view.ChessBoardComponent;
 import xyz.chengzi.aeroplanechess.view.ChessComponent;
+import xyz.chengzi.aeroplanechess.view.NotationSelectorComponent;
 import xyz.chengzi.aeroplanechess.view.SquareComponent;
 
+import javax.swing.event.EventListenerList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +21,37 @@ public class GameController implements InputListener, Listenable<GameStateListen
     private final List<GameStateListener> listenerList = new ArrayList<>();
     private final ChessBoardComponent view;
     private final ChessBoard model;
-   public int rollTime = 0;
+    public int rollTime = 0;
+    private int notation;
+    private int numberOfDiceOne,numberOfDiceTwo;
+
+
+    public void setNumberOfDiceOne(int numberOfDiceOne) {
+        this.numberOfDiceOne = numberOfDiceOne;
+    }
+
+    public void setNumberOfDiceTwo(int numberOfDiceTwo) {
+        this.numberOfDiceTwo = numberOfDiceTwo;
+    }
+
+    public void setNotation(int notation) {
+        this.notation = notation;
+    }
+
+    public int getNotation() {
+        return notation;
+    }
 
     private Integer rolledNumber;
+    ImplementFofMethods implementFofMethods = new ImplementFofMethods();
 
 
     public Integer getRolledNumber() {
-
         int num1 = rolledNumber >> 16;
         int num2 = rolledNumber & 0x00ff;
-        return num1+num2;
+
+        System.out.println(notation);
+        return implementFofMethods.NumberOfMove(num1, num2)[notation];
     }
 
     private int currentPlayer;
@@ -35,7 +59,6 @@ public class GameController implements InputListener, Listenable<GameStateListen
     public GameController(ChessBoardComponent chessBoardComponent, ChessBoard chessBoard) {
         this.view = chessBoardComponent;
         this.model = chessBoard;
-
         view.registerListener(this);
         model.registerListener(view);
     }
@@ -61,9 +84,9 @@ public class GameController implements InputListener, Listenable<GameStateListen
 
     public int rollDice() {
         if (rolledNumber == null) {
-            rolledNumber = RandomUtil.nextInt(1,6);
-            rolledNumber<<=16;
-            int number2 = RandomUtil.nextInt(1,6);
+            rolledNumber = RandomUtil.nextInt(1, 6);
+            rolledNumber <<= 16;
+            int number2 = RandomUtil.nextInt(1, 6);
             rolledNumber |= number2;
             return rolledNumber;
         } else {
@@ -71,9 +94,9 @@ public class GameController implements InputListener, Listenable<GameStateListen
         }
     }
 
-    public void manualDice(int dice1, int dice2){
+    public void manualDice(int dice1, int dice2) {
         rolledNumber = dice1;
-        rolledNumber<<=16;
+        rolledNumber <<= 16;
         rolledNumber |= dice2;
     }
 
@@ -92,8 +115,16 @@ public class GameController implements InputListener, Listenable<GameStateListen
     public void onPlayerClickChessPiece(ChessBoardLocation location, ChessComponent component) {
         if (rolledNumber != null) {
             ChessPiece piece = model.getChessPieceAt(location);
+            int x = getRolledNumber();
+            if(19<=location.getIndex() && location.getIndex()<=22){
+                System.out.println(numberOfDiceOne);
+                System.out.println(numberOfDiceTwo);
+                if(!implementFofMethods.CheckForGoOut(numberOfDiceOne, numberOfDiceTwo)){
+                    x = 0;
+                }
+            }
             if (piece.getPlayer() == currentPlayer) {
-                model.moveChessPiece(location, getRolledNumber(),piece);
+                model.moveChessPiece(location, x, piece);
                 listenerList.forEach(listener -> listener.onPlayerEndRound(currentPlayer));
                 nextPlayer();
                 listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));

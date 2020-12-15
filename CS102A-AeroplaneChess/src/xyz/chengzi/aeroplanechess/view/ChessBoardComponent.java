@@ -5,6 +5,7 @@ import xyz.chengzi.aeroplanechess.listener.InputListener;
 import xyz.chengzi.aeroplanechess.listener.Listenable;
 import xyz.chengzi.aeroplanechess.model.ChessBoard;
 import xyz.chengzi.aeroplanechess.model.ChessBoardLocation;
+import xyz.chengzi.aeroplanechess.model.ChessLocation;
 import xyz.chengzi.aeroplanechess.model.ChessPiece;
 
 import javax.swing.*;
@@ -22,6 +23,12 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
     private final SquareComponent[][] gridComponents;
     private final int dimension, endDimension;
     private final int gridSize;
+
+    public List<ChessLocation> getChessLocationList() {
+        return ChessLocationList;
+    }
+
+    private List<ChessLocation> ChessLocationList = new ArrayList<>();
 
     public ChessBoardComponent(int size, int dimension, int endDimension) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -233,6 +240,8 @@ public class ChessBoardComponent extends JComponent implements Listenable<InputL
             for (int index = 0; index < board.getAllDimension(); index++) {
                 ChessBoardLocation location = new ChessBoardLocation(color, index);
                 ChessPiece piece = board.getChessPieceAt(location);
+                ChessLocation chessLocation = new ChessLocation(color,index,piece.getPlayer(),piece.getNumber());
+                ChessLocationList.add(chessLocation);
                 if (piece != null) {
                     setChessAtGrid(location, PIECE_COLORS[piece.getPlayer()]);
                 } else {

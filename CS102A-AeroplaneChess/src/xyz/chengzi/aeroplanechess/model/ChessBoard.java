@@ -102,6 +102,9 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
         // FIXME: This just naively move the chess forward without checking anything
 
+        if(steps == 0){
+            return;
+        }
         if (dest.getIndex() <= 18) {
             for (int i = 0; i < steps; i++) {
                 dest = nextLocation(dest, piece);

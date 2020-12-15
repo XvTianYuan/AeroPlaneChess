@@ -24,7 +24,9 @@ public class ImplementFofMethods implements MethodsForPlaying {
     public int[] NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo) {
         int add = 0, sub = 0, mul = 0, div = 0;
         add = numberOfDiceOne + numberOfDiceTwo;
-        sub = Math.abs(numberOfDiceOne - numberOfDiceTwo);
+        if(numberOfDiceOne != numberOfDiceTwo){
+            sub = Math.abs(numberOfDiceOne - numberOfDiceTwo);
+        }
         if (numberOfDiceOne * numberOfDiceTwo <= 12)
             mul = numberOfDiceOne * numberOfDiceTwo;
         if (numberOfDiceOne >= numberOfDiceTwo && numberOfDiceOne % numberOfDiceTwo == 0)
@@ -64,7 +66,7 @@ public class ImplementFofMethods implements MethodsForPlaying {
     }
 
     public boolean CheckAnyPlayer(ChessLocation location){
-        if (location.getPlayer() == 4)
+        if (location.getPlayer() ==4)
         return true;
         else return false;
     }
