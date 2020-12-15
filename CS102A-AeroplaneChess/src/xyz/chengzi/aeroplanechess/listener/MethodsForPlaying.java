@@ -3,6 +3,7 @@ package xyz.chengzi.aeroplanechess.listener;
 import com.sun.media.jfxmedia.events.PlayerStateEvent;
 import xyz.chengzi.aeroplanechess.model.ChessBoard;
 import xyz.chengzi.aeroplanechess.model.ChessBoardLocation;
+import xyz.chengzi.aeroplanechess.model.ChessPiece;
 import xyz.chengzi.aeroplanechess.view.DiceSelectorComponent;
 
 public interface MethodsForPlaying {
@@ -27,7 +28,7 @@ public interface MethodsForPlaying {
 
     //TODO:next:implement methods
 
-    void EatOtherPiecesWhenFlying(ChessBoardLocation locationStart);
+    void EatOtherPiecesWhenFlying(ChessBoardLocation locationStart, ChessPiece localPiece,ChessBoard board);
 
     //There are additional shortcut squares. When a plane lands on one of these of its
     //own colour, it may take the shortcut, and any opposing planes in the path of the
@@ -39,15 +40,14 @@ public interface MethodsForPlaying {
     //the player a third roll with enter or move. If the player rolls a third sum no less
     //than 10, any pieces moved by the first two steps must return to their hangar and
     //play passes to the next player.
-    boolean nextRoll(int numberOfDiceOne, int numberOfDiceTwo);
-    //my supplement to last method.
-    //不知道需不需要
+
+    //不知道需不需要(nextroll应该不需要，我删掉了，可以直接从上一个方法里面实现）
     void ChooseToStack(ChessBoardLocation locationOne, ChessBoardLocation locationTwo);
     //When a plane lands on another plane in its own color, the player can choose to stack
     //the pieces and move them as one piece until they reach the centre or are landed on by
     //an opponent. When stacked pieces are sent back to their hangar by an opponent
     //landing on them, they are no longer stacked.
-    int CompeteForEatingPiece(int SumDiceOne , int SumDiceTwo);
+    void CompeteForEatingPiece(int DiceOne , int DiceTwo);
     //When a plane lands on an opposing plane, players determine which gets sent back to
     //its hangar by rolling one die, with the high roll determining the winner. When one
     //plane attacks a stack of planes, it must battle each one by rolling the die. When a stack
