@@ -14,10 +14,9 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
   private final Square[][] grid;
   private final int dimension, endDimension;
   public int[][] NumberTotal = new int[4][4];
-
-  public void WriteArr() {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
+  public void WriteArr(){
+    for(int i=0;i<4;i++){
+      for(int j=0;j<4;j++){
         NumberTotal[i][j] = 0;
         //i:color ; j:number of chess
       }
@@ -42,12 +41,12 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
   public void placeInitialPieces() {
     for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < dimension + endDimension + 5; j++) {
+      for (int j = 0; j < dimension + endDimension; j++) {
         grid[i][j].setPiece(null);
       }
     }
     // FIXME: Demo implementation
-    grid[0][dimension + endDimension].setPiece(new ChessPiece(0, 0));
+    grid[0][dimension + endDimension].setPiece(new  ChessPiece(0, 0));
     grid[0][dimension + endDimension + 1].setPiece(new ChessPiece(0, 1));
     grid[0][dimension + endDimension + 2].setPiece(new ChessPiece(0, 2));
     grid[0][dimension + endDimension + 3].setPiece(new ChessPiece(0, 3));
@@ -64,22 +63,6 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     grid[3][dimension + endDimension + 2].setPiece(new ChessPiece(3, 2));
     grid[3][dimension + endDimension + 3].setPiece(new ChessPiece(3, 3));
     listenerList.forEach(listener -> listener.onChessBoardReload(this));
-  }
-
-  public void placeLoadedPieces(ChessBoardLocation[][] locations) {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < dimension + endDimension + 5; j++) {
-        grid[i][j].setPiece(null);
-      }
-    }
-    for (int player = 0; player < 4; player++) {
-      for (int num = 0; num < 4; num++) {
-        grid[locations[player][num].getColor()][locations[player][num].getIndex()]
-            .setPiece(new ChessPiece(player, num));
-      }
-    }
-    listenerList.forEach(listener -> listener.onChessBoardReload(this));
-
   }
 
   public Square getGridAt(ChessBoardLocation location) {
@@ -119,6 +102,9 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
 
     // FIXME: This just naively move the chess forward without checking anything
 
+    if(steps == 0){
+      return;
+    }
     if (dest.getIndex() <= 18) {
       for (int i = 0; i < steps; i++) {
         dest = nextLocation(dest, piece);
@@ -140,7 +126,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         }
       } else {
 
-        if (NumberTotal[piece.getPlayer()][piece.getNumber()] != 0) {
+        if(NumberTotal[piece.getPlayer()][piece.getNumber()]!=0){
           NumberTotal[piece.getPlayer()][piece.getNumber()] = 2;
         }
         dest = new ChessBoardLocation(dest.getColor(), dest.getIndex() + steps - 1);
@@ -155,7 +141,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     int OldIndex = location.getIndex();
     int NewColor, NewIndex;
 
-    if (NumberTotal[piece.getPlayer()][piece.getNumber()] == 0) {
+    if(NumberTotal[piece.getPlayer()][piece.getNumber()] == 0){
       if (OldIndex >= 19 && OldIndex <= 22) {
         NewColor = OldColor;
         NewIndex = 23;
@@ -170,7 +156,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
           NewColor = 0;
         }
         NewIndex = 0;
-      } else if (OldIndex == 12) {
+      } else if (OldIndex == 12 ) {
         System.out.println("player:" + piece.getPlayer());
         if (piece.getPlayer() == OldColor) {
           NewColor = OldColor;
@@ -204,34 +190,32 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
         } else {
           NewColor = 0;
         }
-      } else {
+      } else{
         //13-18
-        if (OldIndex == 18) {
-          NumberTotal[piece.getPlayer()][piece.getNumber()] =
-              NumberTotal[piece.getPlayer()][piece.getNumber()] + 1;
+        if(OldIndex == 18){
+          NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
           NewColor = OldColor;
-          NewIndex = OldIndex - 1;
-        } else {
+          NewIndex = OldIndex-1;
+        }else{
           NewColor = OldColor;
-          NewIndex = OldIndex + 1;
+          NewIndex = OldIndex +1;
         }
       }
-    } else {
+    }else{
       NewColor = OldColor;
-      if (OldIndex == 12) {
-        NumberTotal[piece.getPlayer()][piece.getNumber()] =
-            NumberTotal[piece.getPlayer()][piece.getNumber()] + 1;
-        NewIndex = OldIndex + 1;
-      } else if (OldIndex == 18) {
-        NumberTotal[piece.getPlayer()][piece.getNumber()] =
-            NumberTotal[piece.getPlayer()][piece.getNumber()] + 1;
-        NewIndex = OldIndex - 1;
-      } else {
-        int num = NumberTotal[piece.getPlayer()][piece.getNumber()] % 2;
-        if (num == 0) {
-          NewIndex = OldIndex + 1;
-        } else {
-          NewIndex = OldIndex - 1;
+      if(OldIndex == 12){
+        NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
+        NewIndex = OldIndex +1;
+      }
+      else if(OldIndex == 18){
+        NumberTotal[piece.getPlayer()][piece.getNumber()]=NumberTotal[piece.getPlayer()][piece.getNumber()]+1;
+        NewIndex = OldIndex -1;
+      }else{
+        int num = NumberTotal[piece.getPlayer()][piece.getNumber()]%2;
+        if(num == 0){
+          NewIndex = OldIndex+1;
+        }else{
+          NewIndex = OldIndex-1;
         }
       }
     }
@@ -239,6 +223,22 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     System.out.println("NewColor:" + NewColor + " NewIndex:" + NewIndex);
 
     return new ChessBoardLocation(NewColor, NewIndex);
+  }
+
+  public void placeLoadedPieces(ChessBoardLocation[][] locations) {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < dimension + endDimension + 5; j++) {
+        grid[i][j].setPiece(null);
+      }
+    }
+    for (int player = 0; player < 4; player++) {
+      for (int num = 0; num < 4; num++) {
+        grid[locations[player][num].getColor()][locations[player][num].getIndex()]
+            .setPiece(new ChessPiece(player, num));
+      }
+    }
+    listenerList.forEach(listener -> listener.onChessBoardReload(this));
+
   }
 
   @Override
