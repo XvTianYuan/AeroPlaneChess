@@ -3,32 +3,27 @@ package xyz.chengzi.aeroplanechess.listener;
 import com.sun.media.jfxmedia.events.PlayerStateEvent;
 import xyz.chengzi.aeroplanechess.model.ChessBoard;
 import xyz.chengzi.aeroplanechess.model.ChessBoardLocation;
+import xyz.chengzi.aeroplanechess.model.ChessLocation;
 import xyz.chengzi.aeroplanechess.model.ChessPiece;
 import xyz.chengzi.aeroplanechess.view.DiceSelectorComponent;
 
+import java.util.List;
+
+
 public interface MethodsForPlaying {
     boolean CheckForGoOut(int numberOfDiceOne, int numberOfDiceTwo);
-    //Take a piece out of the hangar onto the board. This can only be done by rolling a 6
-    //with either of the dice (e.g., roll a 3-6, or 6-2, or 6-6).
+
     int[] NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo);
-    //Move a piece that is on the board clockwise around the track. The number of
-    //spaces moved is derived from the dices with arithmetic operations, maximum 12.
-    //For example, rolling a 2 and a 4 will let you to move any one of your plane by 2, 4,
-    //2+4=6, 4-2=2, 4*2=8, or 4/2=2 spaces. Note that a 4 and a 3 cannot make a move
-    //of int(4/3) spaces.
 
-    boolean EatOthersPiece(ChessBoardLocation locationOne, ChessBoardLocation locationTwo);
+    List<ChessLocation> EatOthersPiece(ChessLocation locationOne, ChessLocation locationTwo);
 
-    //When a player lands on an opponent's piece, the opponent returns that piece to
-    //its hangar.
-    int FlyingFewGrids(ChessBoardLocation ChessLocation, ChessBoardLocation BoardLocation);
-    //When a plane lands on a space of its own colour, it immediately jumps to the next
-    //space of its own colour. Any opposing planes sitting on these squares are sent
-    //back to their hangars.
+    boolean CheckAnyPlayer(ChessLocation location);
+
+    ChessLocation BonusLocation(ChessLocation locationOne, ChessLocation locationTwo);
 
     //TODO:next:implement methods
 
-    void EatOtherPiecesWhenFlying(ChessBoardLocation locationStart, ChessPiece localPiece,ChessBoard board);
+    List<ChessLocation> EatOtherPiecesWhenFlying(ChessLocation locationOne, ChessLocation locationTwo,ChessLocation locationThree);
 
     //There are additional shortcut squares. When a plane lands on one of these of its
     //own colour, it may take the shortcut, and any opposing planes in the path of the
@@ -41,8 +36,8 @@ public interface MethodsForPlaying {
     //than 10, any pieces moved by the first two steps must return to their hangar and
     //play passes to the next player.
 
-    //不知道需不需要(nextroll应该不需要，我删掉了，可以直接从上一个方法里面实现）
-    void ChooseToStack(ChessBoardLocation locationOne, ChessBoardLocation locationTwo);
+
+    void ChooseToStack(ChessLocation locationOne, ChessLocation locationTwo);
     //When a plane lands on another plane in its own color, the player can choose to stack
     //the pieces and move them as one piece until they reach the centre or are landed on by
     //an opponent. When stacked pieces are sent back to their hangar by an opponent

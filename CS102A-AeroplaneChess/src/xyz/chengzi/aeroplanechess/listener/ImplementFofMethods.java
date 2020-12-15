@@ -2,7 +2,11 @@ package xyz.chengzi.aeroplanechess.listener;
 
 import xyz.chengzi.aeroplanechess.model.ChessBoard;
 import xyz.chengzi.aeroplanechess.model.ChessBoardLocation;
+import xyz.chengzi.aeroplanechess.model.ChessLocation;
 import xyz.chengzi.aeroplanechess.model.ChessPiece;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ImplementFofMethods implements MethodsForPlaying {
 
@@ -14,6 +18,7 @@ public class ImplementFofMethods implements MethodsForPlaying {
         }
         return false;
     }
+
 
     @Override
     public int[] NumberOfMove(int numberOfDiceOne, int numberOfDiceTwo) {
@@ -31,36 +36,59 @@ public class ImplementFofMethods implements MethodsForPlaying {
     }
 
     @Override
-    public boolean EatOthersPiece(ChessBoardLocation locationOne, ChessBoardLocation locationTwo) {
-        if (locationOne == locationTwo) {
-            return true;
+    public List<ChessLocation> EatOthersPiece(ChessLocation locationOne, ChessLocation locationTwo) {
+        List<ChessLocation> locations=new LinkedList<ChessLocation>();
+
+        if (locationOne.getPlayer() != locationTwo.getPlayer()) {
+            if (CheckAnyPlayer(locationTwo)){
+                ChessLocation newLocation = new ChessLocation(locationTwo.getColor(),locationTwo.getIndex(),locationOne.getPlayer(),locationOne.getNumber());
+                ChessLocation oldLocation = new ChessLocation(locationOne.getColor(),locationOne.getIndex(),4,4);
+                locations.add(newLocation);
+                locations.add(oldLocation);
+            }else {
+                ChessLocation newLocation = new ChessLocation(locationTwo.getColor(),locationTwo.getIndex(),locationOne.getPlayer(),locationOne.getNumber());
+                ChessLocation oldLocation = new ChessLocation(locationOne.getColor(),locationOne.getIndex(),4,locationOne.getNumber());
+                for (int i=19;i<23;i++) {
+                    ChessLocation loseLocation = new ChessLocation(locationTwo.getColor(),i,locationTwo.getPlayer(),locationTwo.getNumber());//?
+                    if (CheckAnyPlayer(loseLocation)){
+                     loseLocation = new ChessLocation(locationTwo.getColor(),i, locationTwo.getPlayer(), locationTwo.getNumber());
+                        locations.add(loseLocation);
+                    break;
+                    }
+                }
+                locations.add(newLocation);
+                locations.add(oldLocation);
+            }
         }
-        return false;
+        return locations;
     }
-    //color?require a color judge
+
+    public boolean CheckAnyPlayer(ChessLocation location){
+        if (location.getPlayer() == 4)
+        return true;
+        else return false;
+    }
+    //检查这个位置是否有飞机，没有的话返回true，有的话返回false
+    @Override
+    public ChessLocation BonusLocation(ChessLocation locationOne, ChessLocation locationTwo){
+        if (locationOne.getColor()==locationTwo.getColor())
+        return new ChessLocation(locationTwo.getColor(),locationTwo.getIndex()+1,locationOne.getPlayer(),locationOne.getNumber());
+        else return null;
+    }
 
     @Override
-    public int FlyingFewGrids(ChessBoardLocation ChessLocation, ChessBoardLocation BoardLocation) {
-        if (ChessLocation.getColor() == BoardLocation.getColor())
-            return 4;
-        else return 0;
+    public List<ChessLocation> EatOtherPiecesWhenFlying(ChessLocation locationOne, ChessLocation locationTwo,ChessLocation locationThree) {
+        List<ChessLocation> locations=new LinkedList<ChessLocation>();
+        if (locationTwo.getIndex() == 4) {
+            ChessLocation newLocation = new ChessLocation(locationTwo.getColor(),locationTwo.getIndex()+3,locationOne.getPlayer(),locationOne.getNumber());
+            ChessLocation oldLocation = new ChessLocation(locationOne.getColor(),locationOne.getIndex(),4,locationThree.getNumber());
+            locations.add(newLocation);
+            locations.add(oldLocation);
+            if (CheckAnyPlayer(locationThree)){
+                ChessLocation crashLocation = new ChessLocation(locationThree.getColor(),locationThree.getIndex(),4,locationThree.getNumber());
+            }
     }
-
-    @Override
-    public void EatOtherPiecesWhenFlying(ChessBoardLocation locationStart, ChessPiece localPiece, ChessBoard board) {
-        if (locationStart.getIndex() == 4 && localPiece.getPlayer() == locationStart.getColor()) {
-            board.moveChessPiece(locationStart, 3, localPiece);
-            if (locationStart.getColor() == 0 && board.getChessPieceAt(new ChessBoardLocation(2, 15)).getPlayer() == 2) {
-                board.moveChessPiece(new ChessBoardLocation(2, 15), 8, board.getChessPieceAt(new ChessBoardLocation(2, 15)));
-            } else if (locationStart.getColor() == 1 && board.getChessPieceAt(new ChessBoardLocation(3, 15)).getPlayer() == 3) {
-                board.moveChessPiece(new ChessBoardLocation(3, 15), 8, board.getChessPieceAt(new ChessBoardLocation(3, 15)));
-            } else if (locationStart.getColor() == 2 && board.getChessPieceAt(new ChessBoardLocation(0, 15)).getPlayer() == 0) {
-                board.moveChessPiece(new ChessBoardLocation(0, 15), 8, board.getChessPieceAt(new ChessBoardLocation(0, 15)));
-            }else if (locationStart.getColor()==3 && board.getChessPieceAt(new ChessBoardLocation(1,15)).getPlayer()==1){
-                board.moveChessPiece(new ChessBoardLocation(1,15),8, board.getChessPieceAt(new ChessBoardLocation(1,15)));
-        }
-    }
-
+        return locations;
 }
 
     @Override
@@ -69,7 +97,7 @@ public class ImplementFofMethods implements MethodsForPlaying {
     }
 
     @Override
-    public void ChooseToStack(ChessBoardLocation locationOne, ChessBoardLocation locationTwo) {
+    public void ChooseToStack(ChessLocation locationOne, ChessLocation locationTwo) {
 
     }
 
