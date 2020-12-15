@@ -25,7 +25,7 @@ public class DiceSelectorComponent extends JComponent implements ItemListener {
         }
         diceComboBox.setLocation(0, 0);
         diceComboBox.setSize(80, 25);
-        diceComboBox.setVisible(true);
+        diceComboBox.setVisible(false);
         add(diceComboBox);
 
 

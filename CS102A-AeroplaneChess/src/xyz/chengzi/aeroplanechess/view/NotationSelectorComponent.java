@@ -5,8 +5,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 public class NotationSelectorComponent extends JComponent implements ItemListener {
-    private JRadioButton manualDiceRadio;
-    private JRadioButton randomDiceRadio;
     private JRadioButton AddButton;
     private JRadioButton SubButton;
     private JRadioButton MulButton;
