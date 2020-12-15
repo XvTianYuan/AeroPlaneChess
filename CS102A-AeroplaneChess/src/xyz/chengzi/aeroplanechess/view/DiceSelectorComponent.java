@@ -7,6 +7,10 @@ import java.awt.event.ItemListener;
 public class DiceSelectorComponent extends JComponent implements ItemListener {
     private JRadioButton manualDiceRadio;
     private JRadioButton randomDiceRadio;
+    private JRadioButton AddButton;
+    private JRadioButton SubButton;
+    private JRadioButton MulButton;
+    private JRadioButton DevButton;
     private JComboBox<Integer> diceComboBox;
     private boolean randomDice = true;
     private int numberOfChoose = 0;
@@ -21,8 +25,10 @@ public class DiceSelectorComponent extends JComponent implements ItemListener {
         }
         diceComboBox.setLocation(0, 0);
         diceComboBox.setSize(80, 25);
-        diceComboBox.setVisible(true);
+        diceComboBox.setVisible(false);
         add(diceComboBox);
+
+
 
         manualDiceRadio = new JRadioButton("manual");
         randomDiceRadio = new JRadioButton("auto", true);

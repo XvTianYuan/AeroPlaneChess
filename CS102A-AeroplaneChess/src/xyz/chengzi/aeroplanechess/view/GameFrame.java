@@ -37,10 +37,13 @@ public class GameFrame extends JFrame implements GameStateListener {
 
         DiceSelectorComponent diceSelectorComponent = new DiceSelectorComponent();
         DiceSelectorComponent diceSelectorComponent1 = new DiceSelectorComponent();
+        NotationSelectorComponent notationSelectorComponent = new NotationSelectorComponent();
         diceSelectorComponent.setLocation(396, 585);
         diceSelectorComponent1.setLocation(396,615);
+        notationSelectorComponent.setLocation(396-220,645);
         add(diceSelectorComponent);
         add(diceSelectorComponent1);
+        add(notationSelectorComponent);
 
         JButton button = new JButton("roll");
         button.addActionListener((e) -> {
@@ -56,7 +59,12 @@ public class GameFrame extends JFrame implements GameStateListener {
                     JOptionPane.showMessageDialog(this, "You have already rolled the dice");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "You selected " + diceSelectorComponent.getSelectedDice());
+//                JOptionPane.showMessageDialog(this, "You selected " + diceSelectorComponent.getSelectedDice());
+                num1 = (Integer) diceSelectorComponent1.getSelectedDice();
+                num2 = (Integer) diceSelectorComponent.getSelectedDice();
+                statusLabel.setText(String.format("[%s] Selected a (%d)(%d) , sum is %d",
+                    PLAYER_NAMES[controller.getCurrentPlayer()], num1, num2, num1 + num2));
+                controller.manualDice(num1,num2);
             }
         });
 
