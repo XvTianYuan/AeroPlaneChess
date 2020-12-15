@@ -35,4 +35,9 @@ public class ChessBoardLocation {
     public int hashCode() {
         return Objects.hash(color, index);
     }
+
+    @Override
+    public String toString(){
+        return "("+color+","+index+")";
+    }
 }
