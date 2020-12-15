@@ -46,7 +46,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
             }
         }
         // FIXME: Demo implementation
-        grid[0][dimension + endDimension].setPiece(new ChessPiece(0, 0));
+        grid[0][dimension + endDimension].setPiece(new  ChessPiece(0, 0));
         grid[0][dimension + endDimension + 1].setPiece(new ChessPiece(0, 1));
         grid[0][dimension + endDimension + 2].setPiece(new ChessPiece(0, 2));
         grid[0][dimension + endDimension + 3].setPiece(new ChessPiece(0, 3));
