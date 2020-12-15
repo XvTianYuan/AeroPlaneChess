@@ -81,12 +81,7 @@ public class GameController implements InputListener, Listenable<GameStateListen
     currentPlayer = 0;
     listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));
   }
-  public void loadGame(ChessBoardLocation[][] locations, int turn){
-    model.placeLoadedPieces(locations);
-    rolledNumber = null;
-    currentPlayer = turn;
-    listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));
-  }
+
   public int rollDice() {
     if (rolledNumber == null) {
       rolledNumber = RandomUtil.nextInt(1, 6);

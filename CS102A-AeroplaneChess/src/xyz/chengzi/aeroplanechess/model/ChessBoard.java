@@ -74,7 +74,7 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
   }
 
   public int getAllDimension() {
-    return dimension + endDimension + 5;
+    return dimension + endDimension + 4;
   }
 
   public int getEndDimension() {
@@ -223,22 +223,6 @@ public class ChessBoard implements Listenable<ChessBoardListener> {
     System.out.println("NewColor:" + NewColor + " NewIndex:" + NewIndex);
 
     return new ChessBoardLocation(NewColor, NewIndex);
-  }
-
-  public void placeLoadedPieces(ChessBoardLocation[][] locations) {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < dimension + endDimension + 5; j++) {
-        grid[i][j].setPiece(null);
-      }
-    }
-    for (int player = 0; player < 4; player++) {
-      for (int num = 0; num < 4; num++) {
-        grid[locations[player][num].getColor()][locations[player][num].getIndex()]
-            .setPiece(new ChessPiece(player, num));
-      }
-    }
-    listenerList.forEach(listener -> listener.onChessBoardReload(this));
-
   }
 
   @Override
