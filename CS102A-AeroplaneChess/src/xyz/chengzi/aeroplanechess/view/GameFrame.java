@@ -4,16 +4,14 @@ import xyz.chengzi.aeroplanechess.controller.GameController;
 import xyz.chengzi.aeroplanechess.listener.GameStateListener;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameFrame extends JFrame implements GameStateListener {
-    private static final String[] PLAYER_NAMES = {"Yellow", "Blue", "Green", "Red"};
+    private static final String[] PLAYER_NAMES = {"Yellow", "Blue","Green","Red"};
     private final JLabel statusLabel = new JLabel();
     public int num1;
     public int num2;
-
     public int getNum1() {
         return num1;
     }
@@ -38,11 +36,11 @@ public class GameFrame extends JFrame implements GameStateListener {
         add(statusLabel);
 
         DiceSelectorComponent diceSelectorComponent = new DiceSelectorComponent();
-        NotationSelectorComponent notationSelectorComponent = new NotationSelectorComponent();
+        DiceSelectorComponent diceSelectorComponent1 = new DiceSelectorComponent();
         diceSelectorComponent.setLocation(396, 585);
-        notationSelectorComponent.setLocation(396 - 220, 620);
+        diceSelectorComponent1.setLocation(396,615);
         add(diceSelectorComponent);
-        add(notationSelectorComponent);
+        add(diceSelectorComponent1);
 
         JButton button = new JButton("roll");
         button.addActionListener((e) -> {
@@ -51,46 +49,27 @@ public class GameFrame extends JFrame implements GameStateListener {
                 num1 = dice1 >> 16;
                 num2 = dice1 & 0x00ff;
                 if (dice1 != -1) {
-                    statusLabel.setText(String.format("[%s] Rolled a (%d)(%d) , please to choose:",
-                            PLAYER_NAMES[controller.getCurrentPlayer()], num1, num2));
+                    statusLabel.setText(String.format("[%s] Rolled a (%d)(%d) , sum is %d",
+                            PLAYER_NAMES[controller.getCurrentPlayer()], num1, num2, num1 + num2));
 
                 } else {
                     JOptionPane.showMessageDialog(this, "You have already rolled the dice");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "You selected " + diceSelectorComponent.getSelectedDice());
+//                JOptionPane.showMessageDialog(this, "You selected " + diceSelectorComponent.getSelectedDice());
+                num1 = (Integer) diceSelectorComponent1.getSelectedDice();
+                num2 = (Integer) diceSelectorComponent.getSelectedDice();
+                statusLabel.setText(String.format("[%s] Selected a (%d)(%d) , sum is %d",
+                    PLAYER_NAMES[controller.getCurrentPlayer()], num1, num2, num1 + num2));
+                controller.manualDice(num1,num2);
             }
         });
-
-//        JButton button1 = new JButton("choose");
-//        button1.addActionListener((e) -> {
-//            String s;
-//            switch (notationSelectorComponent.WhichNotationToChoose()) {
-//                case 0:
-//                    s = "+";
-//                    break;
-//                case 1:
-//                    s = "-";
-//                    break;
-//                case 2:
-//                    s= "x";
-//                    break;
-//                default:
-//                    s="/";
-//            }
-//            System.out.println(s);
-//            statusLabel.setText(String.format("You choose: ",s));
-//        });
 
 
         button.setLocation(668, 585);
         button.setFont(button.getFont().deriveFont(18.0f));
         button.setSize(90, 30);
         add(button);
-//        button1.setLocation(668, 615);
-//        button1.setFont(button1.getFont().deriveFont(18.0f));
-//        button1.setSize(90, 30);
-//        add(button1);
     }
 
 

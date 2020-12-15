@@ -24,6 +24,7 @@ public class GameController implements InputListener, Listenable<GameStateListen
 
 
     public Integer getRolledNumber() {
+
         int num1 = rolledNumber >> 16;
         int num2 = rolledNumber & 0x00ff;
         return num1+num2;
@@ -68,6 +69,12 @@ public class GameController implements InputListener, Listenable<GameStateListen
         } else {
             return -1;
         }
+    }
+
+    public void manualDice(int dice1, int dice2){
+        rolledNumber = dice1;
+        rolledNumber<<=16;
+        rolledNumber |= dice2;
     }
 
     public int nextPlayer() {
